@@ -141,14 +141,13 @@ def compile(filename_in: str, filename_out: str):
 
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) < 3:
-        print("not enough arguments")
-        help_msg()
-        exit(1)
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file_in", help="Filepath with text programm")
+    parser.add_argument("file_out", help="Filepath for compiled programm")
+    args = parser.parse_args()
 
-    filename_in = sys.argv[1]
-    filename_out = sys.argv[2]
-    #print("fn IN:", filename_in)
-    #print("fn OUT:", filename_out)
+    filename_in = args.file_in
+    filename_out = args.file_out
 
     compile(filename_in, filename_out)
