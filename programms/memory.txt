@@ -1,5 +1,0 @@
-ld 5
-add
-mul
-mul
-hlt

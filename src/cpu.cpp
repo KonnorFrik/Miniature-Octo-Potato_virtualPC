@@ -32,47 +32,85 @@ void CPU::execute() {
         std::cout << "[DEBUG] Istruction: " << std::hex << static_cast<short>(this->instruction) << std::dec;
     }
 
+    Byte buf;
+
     switch (this->instruction) {
         case (LD):
-            this->data = load_data();
+            buf = load_data();
+
             if (DEBUG) {
                 std::cout << " - LD "
-                          << "data: " << std::hex << static_cast<short>(this->data) << std::dec << std::endl;
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
             }
+
+            this->A = buf;
             break;
 
         case (ADD):
+            buf = load_data();
+
             if (DEBUG) {
-                std::cout << " - ADD" << std::endl;
+                std::cout << " - ADD, data:"
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
             }
-            this->A += this->data;
+
+            this->A += buf;
             break;
 
         case (SUB):
+            buf = load_data();
+
             if (DEBUG) {
-                std::cout << " - SUB" << std::endl;
+                std::cout << " - SUB, data:"
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
             }
-            this->A -= this->data;
+
+            this->A -= buf;
             break;
 
         case (MUL):
+            buf = load_data();
+
             if (DEBUG) {
-                std::cout << " - MUL" << std::endl;
+                std::cout << " - MUL, data:"
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
             }
-            this->A *= this->data;
+
+            this->A *= buf;
             break;
 
         case (DIV):
+            buf = load_data();
+
             if (DEBUG) {
-                std::cout << " - DIV" << std::endl;
+                std::cout << " - DIV, data:"
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
             }
-            this->A /= this->data;
+
+            this->A /= buf;
             break;
 
         case (HLT):
+            
             if (DEBUG) {
                 std::cout << " - HLT" << std::endl;
             }
+
             this->run_bit = false;
             break;
 
@@ -86,7 +124,7 @@ void CPU::execute() {
 CPU::CPU(Memory& memory) : memory(memory) {}
 
 void CPU::run() {
-    if (this->mode) {
+    if (this->mode == STEP) {
         this->memory.print_hex();
         std::cout << std::endl;
     }
@@ -96,7 +134,7 @@ void CPU::run() {
         this->PC++;
         execute();
 
-        if (this->mode) {
+        if (this->mode == STEP) {
             std::cout << std::endl;
             this->dump();
             std::getchar();
@@ -110,7 +148,7 @@ void CPU::dump() {
               << std::endl;
     std::cout << "run_bit: " << std::hex << this->run_bit << std::dec << std::endl;
     std::cout << "debug mode: " << this->mode << std::endl;
-    std::cout << "data: " << std::hex << static_cast<short>(this->data) << std::dec << std::endl;
+    //std::cout << "data: " << std::hex << static_cast<short>(this->data) << std::dec << std::endl;
     std::cout << "A: hex(" << std::hex << static_cast<short>(this->A) << std::dec << ") dec("
               << static_cast<short>(this->A) << ")" << std::endl;
 }

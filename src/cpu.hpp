@@ -15,7 +15,7 @@ class CPU {
 
     Byte PC{0};           // mem addr
     Byte instruction{0};  // for store instruction
-    Byte data{0};         // for store data
+    //Byte data{0};         // for store data
     Byte A{0};            // number register (like output register)
     bool run_bit{true};
 

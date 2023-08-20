@@ -25,7 +25,7 @@ Architecture:
     CPU:
         registers:
             A(accumulator): 8-bit - all math operations results store here
-            data: 8-bit - for store loaded data from memory for operations
+            --data: 8-bit - for store loaded data from memory for operations
             PC aka Instruction pointer: 8-bit - store address of next instruction in memory
             instruction: 8-bit - store current instruction for execution
             run_bit: 1-bit

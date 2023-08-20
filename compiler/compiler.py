@@ -1,5 +1,8 @@
+#! /usr/local/bin/python3
+
 from sap_lexer import SapLexer
 from typing import Iterable
+from helps import is_hex
 import token_tree
 import operator as op
 import pygments
@@ -61,10 +64,10 @@ def write_programm(bin_programm: Iterable[bytes], filename_out: str) -> int:
     return writed
 
 
-#TODO compiler v2
+#TODO
 # try convert str inst to bin immediately with mapping
 # ? on exception KeyError and try convert to hex like data it is
-# or check 'type' of instr (need or not data for this)
+# or check 'type' of instr (is need data for this)
 # Semantic Validation
 
 def cmp_v2(tokens_splitted: Iterable[tuple[tuple, ...]]) -> tuple[bytes]:
@@ -74,56 +77,37 @@ def cmp_v2(tokens_splitted: Iterable[tuple[tuple, ...]]) -> tuple[bytes]:
         node = token_tree.create_node(row)
         tree.append(node)
 
+
     for node in tree:
         byte_instr = None
-        byte_operand = None
+        byte_operand_left = None
 
 
         if node.token == pygments.token.Keyword:
             byte_instr = instruction_code_map[node.value]
 
-            if node.value == "ld":
-                if node.left.token == pygments.token.Number:
-                    byte_operand = int(node.left.value, base=16)
+            #if node.value in "ld":
+                #if node.left.token == pygments.token.Number:
+                    #byte_operand_left = int(node.left.value, base=16)
+
+            if node.left is not None:
+                if is_hex(node.left.value):
+                    byte_operand_left = int(node.left.value, base=16)
+
+                elif node.left.value.isdigit():
+                    byte_operand_left = int(node.left.value, base=10)
+
 
         if byte_instr:
             res.append(byte_instr.to_bytes())
 
-            if byte_operand:
-                res.append(byte_operand.to_bytes())
+            if byte_operand_left:
+                res.append(byte_operand_left.to_bytes())
+
+            #if byte_operand_right:
+                #res.append(byte_operand_right.to_bytes())
 
     return res
-
-def cmp_v1(tokens_splitted: Iterable[tuple[tuple, ...]]) -> tuple[bytes]:
-    res = list()
-    for row in tokens_splitted:
-        match row:
-            case ((_, str("ld") as instr), (_, str() as num_str)):
-                #print("LD:", num_str, instruction_code_map[instr])
-                res.append(instruction_code_map[instr].to_bytes())
-                res.append(int(num_str, base=16).to_bytes())
-
-            case ((_, str("add") as instr),):
-                #print("ADD:", instruction_code_map[instr])
-                res.append(instruction_code_map[instr].to_bytes())
-
-            case ((_, str("sub") as instr),):
-                #print("SUB:", instruction_code_map[instr])
-                res.append(instruction_code_map[instr].to_bytes())
-
-            case ((_, str("mul") as instr),):
-                #print("MUL:", instruction_code_map[instr])
-                res.append(instruction_code_map[instr].to_bytes())
-
-            case ((_, str("div") as instr),):
-                #print("DIV:", instruction_code_map[instr])
-                res.append(instruction_code_map[instr].to_bytes())
-
-            case ((_, str("hlt") as instr),):
-                #print("HALT:", instruction_code_map[instr])
-                res.append(instruction_code_map[instr].to_bytes())
-
-    return tuple(res)
 
 
 def compile(filename_in: str, filename_out: str):

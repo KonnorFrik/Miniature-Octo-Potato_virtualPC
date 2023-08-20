@@ -6,11 +6,22 @@
 #include "memory.hpp"
 #include "settings.hpp"
 #include "utils.hpp"
-//#include "architecture.hpp"
 
 #define DEBUG_ARG_WORD "debug"
-//#define ROM_NAME "programms/memory.rom"
+#define HELP_ARG_WORD "-help"
+#define HELP_ARG_WORD_SHORT "-h"
 #define BAD_ARGS_CODE 3
+
+void print_help() {
+    std::cout << "SAP Emulator" << std::endl;
+    std::cout << "Usage:\nsap filename ["
+        << DEBUG_ARG_WORD << "] "
+        << "[-h | --help]"
+        << std::endl;
+    std::cout << "filename - required first positional argument" << std::endl;
+    std::cout << "debug - optional argument for step mode" << std::endl;
+    std::cout << "-h or --help - help message" << std::endl;
+}
 
 int main(int argc, char* argv[]) {
     std::string filename;
@@ -19,24 +30,29 @@ int main(int argc, char* argv[]) {
 
     if (argc < 2) {
         std::cout << "filename with programm not given" << std::endl;
+        print_help();
         exit(BAD_ARGS_CODE);
 
     } else {
-        for (int i = 0; i < argc; ++i) {
+        for (int i = 1; i < argc; ++i) {
             std::string buf{argv[i]};
-            if (buf == DEBUG_ARG_WORD && buf != this_prog_name) {
+            if (buf == DEBUG_ARG_WORD) {
                 cpu_debug_flag = true;
                 continue;
             }
 
-            if (buf != DEBUG_ARG_WORD && buf != this_prog_name) {
+            if (buf == HELP_ARG_WORD || buf == HELP_ARG_WORD_SHORT) {
+                print_help();
+                exit(0);
+                continue;
+            }
+
+            if (buf != DEBUG_ARG_WORD && !(buf == HELP_ARG_WORD_SHORT || buf == HELP_ARG_WORD)) {
                 filename = buf;
                 continue;
             }
         }
     }
-
-    // std::string filename = argc >= 2 ? argv[1] : ROM_NAME;
 
     if (DEBUG) {
         std::cout << "[DEBUG]" << std::endl;
@@ -49,15 +65,6 @@ int main(int argc, char* argv[]) {
     int size = pow(2, CPU_BITS);
     Memory memory(size);
 
-    /***Programm here***/
-    // memory[0x00] = 0x01;
-    // memory[0x01] = 25;
-    // memory[0x02] = 0x11;
-    // memory[0x03] = 0x01;
-    // memory[0x04] = 5;
-    // memory[0x05] = 0x14;
-    // memory[0x06] = 0xff;
-    /***Programm here***/
     load_rom_to_mem(filename, memory);
 
     CPU cpu(memory);
