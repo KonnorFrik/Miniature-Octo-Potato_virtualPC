@@ -17,7 +17,8 @@ int main(int argc, char* argv[]) {
     bool cpu_debug_flag{false};
 
     if (argc < 2) {
-        filename = ROM_NAME;
+        std::cout << "filename with programm not given" << std::endl;
+        exit(BAD_ARGS_CODE);
 
     } else {
         for (int i = 0; i < argc; ++i) {
