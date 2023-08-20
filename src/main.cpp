@@ -9,7 +9,8 @@
 //#include "architecture.hpp"
 
 #define DEBUG_ARG_WORD "debug"
-#define ROM_NAME "programms/memory.rom"
+//#define ROM_NAME "programms/memory.rom"
+#define BAD_ARGS_CODE 3
 
 int main(int argc, char* argv[]) {
     std::string filename;
