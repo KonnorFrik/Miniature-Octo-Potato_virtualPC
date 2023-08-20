@@ -9,7 +9,8 @@
 //#include "architecture.hpp"
 
 #define DEBUG_ARG_WORD "debug"
-#define ROM_NAME "programms/memory.rom"
+//#define ROM_NAME "programms/memory.rom"
+#define BAD_ARGS_CODE 3
 
 int main(int argc, char* argv[]) {
     std::string filename;
@@ -17,7 +18,8 @@ int main(int argc, char* argv[]) {
     bool cpu_debug_flag{false};
 
     if (argc < 2) {
-        filename = ROM_NAME;
+        std::cout << "filename with programm not given" << std::endl;
+        exit(BAD_ARGS_CODE);
 
     } else {
         for (int i = 0; i < argc; ++i) {
@@ -47,15 +49,6 @@ int main(int argc, char* argv[]) {
     int size = pow(2, CPU_BITS);
     Memory memory(size);
 
-    /***Programm here***/
-    // memory[0x00] = 0x01;
-    // memory[0x01] = 25;
-    // memory[0x02] = 0x11;
-    // memory[0x03] = 0x01;
-    // memory[0x04] = 5;
-    // memory[0x05] = 0x14;
-    // memory[0x06] = 0xff;
-    /***Programm here***/
     load_rom_to_mem(filename, memory);
 
     CPU cpu(memory);
