@@ -14,6 +14,7 @@ class SapLexer(RegexLexer):
             (r"^\s*sub", token.Keyword),
             (r"^\s*mul", token.Keyword),
             (r"^\s*div", token.Keyword),
+            #(r"^\s*neg", token.Keyword),
 
             (r"^\s*and", token.Keyword),
             (r"^\s*or", token.Keyword),

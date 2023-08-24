@@ -13,6 +13,7 @@ enum RUN_MODE {
 class CPU {
     Memory& memory;
 
+    Byte start_addr{0};
     Byte PC{0};           // mem addr
     Byte instruction{0};  // for store instruction
     //Byte data{0};         // for store data
@@ -25,11 +26,12 @@ class CPU {
     short mode{MAIN};
 
    public:
-    explicit CPU(Memory&);
+    explicit CPU(Memory&, Byte);
 
     void run();
     void dump();
     void switch_mode();
+    void set_start_addr(const Byte&);
 };
 
 #endif

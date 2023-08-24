@@ -105,6 +105,20 @@ void CPU::execute() {
             this->A /= buf;
             break;
 
+        //case (NEG):
+            //buf = load_data();
+//
+            //if (DEBUG) {
+                //std::cout << " - NEG"
+                    //<< std::hex
+                    //<< static_cast<short>(buf)
+                    //<< std::dec
+                    //<< std::endl;
+            //}
+//
+            //this->A = -this->A;
+            //break;
+
         case (AND):
             buf = load_data();
 
@@ -173,7 +187,7 @@ void CPU::execute() {
     }
 }
 
-CPU::CPU(Memory& memory) : memory(memory) {}
+CPU::CPU(Memory& memory, Byte start_addr) : memory(memory), start_addr(start_addr) {}
 
 void CPU::run() {
     if (this->mode == STEP) {
@@ -195,6 +209,7 @@ void CPU::run() {
 }
 
 void CPU::dump() {
+    std::cout << "Start Address: " << std::hex << static_cast<short>(this->start_addr) << std::dec << std::endl;
     std::cout << "PC: " << std::hex << static_cast<short>(this->PC) << std::dec << std::endl;
     std::cout << "instruction: " << std::hex << static_cast<short>(this->instruction) << std::dec
               << std::endl;
@@ -203,4 +218,9 @@ void CPU::dump() {
     //std::cout << "data: " << std::hex << static_cast<short>(this->data) << std::dec << std::endl;
     std::cout << "A: hex(" << std::hex << static_cast<short>(this->A) << std::dec << ") dec("
               << static_cast<short>(this->A) << ")" << std::endl;
+}
+
+void CPU::set_start_addr(const Byte& addr) {
+    this->start_addr = addr;
+    this->PC = addr;
 }

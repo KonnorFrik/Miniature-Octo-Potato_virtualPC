@@ -6,8 +6,9 @@
 
 #include "memory.hpp"
 #include "settings.hpp"
+#include "utils.hpp"
 
-int load_rom_to_mem(const std::string& filename, Memory& mem) {
+int load_rom_to_mem(const std::string& filename, Memory& mem, int mem_size, Byte& start_addr_out) {
     std::ifstream file(filename, std::ios::in | std::ios::binary | std::ios::ate);
     std::streampos size;
 
@@ -16,17 +17,19 @@ int load_rom_to_mem(const std::string& filename, Memory& mem) {
 
     if (file.is_open()) {
         size = file.tellg();
+        start_addr_out = rand() % (mem_size - size);
         memblock = new char[size];
         file.seekg(0, std::ios::beg);
         file.read(memblock, size);
+
         file.close();
     } else {
         std::cout << "File not opened for uncknown reason" <<  std::endl;
         status_code = 1;
     }
 
-    for (int i = 0; i < size; ++i) {
-        mem[i] = memblock[i];
+    for (int ind = start_addr_out, i = 0; i < size; ++i, ++ind) {
+        mem[ind] = memblock[i];
     }
 
     delete memblock;

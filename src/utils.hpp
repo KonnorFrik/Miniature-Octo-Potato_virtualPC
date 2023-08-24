@@ -4,7 +4,8 @@
 #include <string>
 
 #include "memory.hpp"
+#include "architecture.hpp"
 
-int load_rom_to_mem(const std::string& filename, Memory& mem);
+int load_rom_to_mem(const std::string& filename, Memory& mem, int mem_size, Byte& start_addr_out);
 
 #endif

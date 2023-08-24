@@ -1,12 +1,16 @@
 ld_ = "ld"
+
 add_ = "add"
 sub_ = "sub"
 mul_ = "mul"
 div_ = "div"
+#neg_ = "neg"
+
 and_ = "and"
 or_ = "or"
 xor_ = "xor"
 inv_ = "inv"
+
 hlt_ = "hlt"
 
 
@@ -19,6 +23,7 @@ instruction_code_map = {
     sub_: 0x12,
     mul_: 0x13,
     div_: 0x14,
+    #neg_: 0x15,
 
     #logic
     and_: 0x20,

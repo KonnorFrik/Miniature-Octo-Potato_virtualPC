@@ -6,6 +6,7 @@
 #include "memory.hpp"
 #include "settings.hpp"
 #include "utils.hpp"
+#include "architecture.hpp"
 
 #define DEBUG_ARG_WORD "debug"
 #define HELP_ARG_WORD "-help"
@@ -65,12 +66,14 @@ int main(int argc, char* argv[]) {
     int size = pow(2, CPU_BITS);
     Memory memory(size);
 
-    load_rom_to_mem(filename, memory);
+    Byte start_addr{0};
+    load_rom_to_mem(filename, memory, size, start_addr);
 
-    CPU cpu(memory);
+    CPU cpu(memory, start_addr);
     if (cpu_debug_flag) {
         cpu.switch_mode();
     }
+    cpu.set_start_addr(start_addr);
     cpu.run();
 
     std::cout << std::endl;

@@ -11,6 +11,7 @@ static const Byte ADD = 0x11;  // +
 static const Byte SUB = 0x12;  // -
 static const Byte MUL = 0x13;  // *
 static const Byte DIV = 0x14;  // /
+//static const Byte NEG = 0x15;  // /
 
 static const Byte AND = 0x20;  // &
 static const Byte OR = 0x21;  // &

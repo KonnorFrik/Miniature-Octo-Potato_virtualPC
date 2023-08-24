@@ -4,7 +4,8 @@ import pygments
 from instructions import *
 
 __non_operandable_instructions = [
-    hlt_, inv_,
+    hlt_,
+    inv_,
 ]
 
 class SemanticError(Exception):
