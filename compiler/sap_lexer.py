@@ -16,6 +16,9 @@ class SapLexer(RegexLexer):
             (r"^\s*div", token.Keyword),
 
             (r"^\s*and", token.Keyword),
+            (r"^\s*or", token.Keyword),
+            (r"^\s*xor", token.Keyword),
+            (r"^\s*inv", token.Keyword),
 
             (r"^\s*hlt", token.Keyword),
             (r"0x[\d+abcdef]+", token.Number),

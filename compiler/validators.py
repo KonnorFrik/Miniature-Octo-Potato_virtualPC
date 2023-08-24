@@ -1,6 +1,11 @@
 from typing import Iterable
 from helps import _tokengetter, _datagetter
 import pygments
+from instructions import *
+
+__non_operandable_instructions = [
+    hlt_, inv_,
+]
 
 class SemanticError(Exception):
     ...
@@ -21,7 +26,7 @@ def semantic_validator(pairs: Iterable):
                 msg = "Line: {}: After '{}' cannot be number".format(str_count, instr)
                 raise SyntaxError(msg)
 
-            case ((pygments.token.Keyword, str() as instr ),) if instr != "hlt":
+            case ((pygments.token.Keyword, str() as instr ),) if instr not in __non_operandable_instructions:
                 msg = "Line {}: Missings operand after: {}".format(str_count, instr)
                 raise SyntaxError(msg)
 

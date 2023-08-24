@@ -1,17 +1,32 @@
+ld_ = "ld"
+add_ = "add"
+sub_ = "sub"
+mul_ = "mul"
+div_ = "div"
+and_ = "and"
+or_ = "or"
+xor_ = "xor"
+inv_ = "inv"
+hlt_ = "hlt"
+
+
 instruction_code_map = {
     # register manipulating
-    "ld": 0x01,
+    ld_: 0x01,
 
     # math
-    "add": 0x11,
-    "sub": 0x12,
-    "mul": 0x13,
-    "div": 0x14,
+    add_: 0x11,
+    sub_: 0x12,
+    mul_: 0x13,
+    div_: 0x14,
 
     #logic
-    "and": 0x20,
+    and_: 0x20,
+    or_ : 0x21,
+    xor_: 0x22,
+    inv_: 0x23,
 
-    "hlt": 0xff,
+    hlt_: 0xff,
 }
 
 

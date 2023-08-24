@@ -119,6 +119,42 @@ void CPU::execute() {
             this->A &= buf;
             break;
 
+        case (OR):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - OR, data: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->A |= buf;
+            break;
+
+        case (XOR):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - XOR, data: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->A ^= buf;
+            break;
+
+        case (INV):
+            if (DEBUG) {
+                std::cout << " - INV" << std::endl;
+            }
+
+            this->A = ~this->A;
+            break;
+
         case (HLT):
             if (DEBUG) {
                 std::cout << " - HLT" << std::endl;

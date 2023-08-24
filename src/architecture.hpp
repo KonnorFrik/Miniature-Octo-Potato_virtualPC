@@ -13,6 +13,9 @@ static const Byte MUL = 0x13;  // *
 static const Byte DIV = 0x14;  // /
 
 static const Byte AND = 0x20;  // &
+static const Byte OR = 0x21;  // &
+static const Byte XOR = 0x22;  // &
+static const Byte INV = 0x23;  // &
 
 static const Byte HLT = 0xff;
 
