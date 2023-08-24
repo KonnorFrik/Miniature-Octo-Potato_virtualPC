@@ -1,6 +1,7 @@
 __import__ = [
     "_tokengetter",
     "_datagetter",
+    "is_hex",
 ]
 
 import operator as op

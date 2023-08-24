@@ -39,7 +39,7 @@ void CPU::execute() {
             buf = load_data();
 
             if (DEBUG) {
-                std::cout << " - LD "
+                std::cout << " - LD, data: "
                     << std::hex
                     << static_cast<short>(buf)
                     << std::dec
@@ -53,7 +53,7 @@ void CPU::execute() {
             buf = load_data();
 
             if (DEBUG) {
-                std::cout << " - ADD, data:"
+                std::cout << " - ADD, data: "
                     << std::hex
                     << static_cast<short>(buf)
                     << std::dec
@@ -67,7 +67,7 @@ void CPU::execute() {
             buf = load_data();
 
             if (DEBUG) {
-                std::cout << " - SUB, data:"
+                std::cout << " - SUB, data: "
                     << std::hex
                     << static_cast<short>(buf)
                     << std::dec
@@ -81,7 +81,7 @@ void CPU::execute() {
             buf = load_data();
 
             if (DEBUG) {
-                std::cout << " - MUL, data:"
+                std::cout << " - MUL, data: "
                     << std::hex
                     << static_cast<short>(buf)
                     << std::dec
@@ -95,7 +95,7 @@ void CPU::execute() {
             buf = load_data();
 
             if (DEBUG) {
-                std::cout << " - DIV, data:"
+                std::cout << " - DIV, data: "
                     << std::hex
                     << static_cast<short>(buf)
                     << std::dec
@@ -115,7 +115,10 @@ void CPU::execute() {
             break;
 
         default:
-            std::cout << " - Unknown instruction" << std::endl;
+            if (DEBUG) {
+                std::cout << " - Unknown instruction" << std::endl;
+            }
+
             this->run_bit = false;
             break;
     }

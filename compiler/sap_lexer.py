@@ -14,7 +14,7 @@ class SapLexer(RegexLexer):
             (r"^\s*mul", token.Keyword),
             (r"^\s*div", token.Keyword),
             (r"^\s*hlt", token.Keyword),
-            (r"0x\d+", token.Number),
+            (r"0x[\d+abcdef]+", token.Number),
             (r"\d+", token.Number),
 
             (r"\s", token.Whitespace),

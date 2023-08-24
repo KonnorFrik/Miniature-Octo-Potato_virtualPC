@@ -2,22 +2,15 @@
 
 from sap_lexer import SapLexer
 from typing import Iterable
-from helps import is_hex
+from helps import is_hex, _tokengetter, _datagetter
+from instructions import *
+import validators
 import token_tree
 import operator as op
 import pygments
 
-instruction_code_map = {
-    "ld": 0x01,
-    "add": 0x11,
-    "sub": 0x12,
-    "mul": 0x13,
-    "div": 0x14,
-    "hlt": 0xff,
-}
-
-_tokengetter = op.itemgetter(0)
-_datagetter = op.itemgetter(1)
+#_tokengetter = op.itemgetter(0)
+#_datagetter = op.itemgetter(1)
 
 def convert_to_rows(gen: Iterable) -> tuple[tuple[pygments.token._TokenType, str]]:
     """ Clear tokens from comments and whitespaces, splits tokens into lines """
@@ -42,13 +35,6 @@ def convert_to_rows(gen: Iterable) -> tuple[tuple[pygments.token._TokenType, str
     return tuple(page)
 
 
-def error_validator(itr: Iterable):
-    for pair in itr:
-        if _tokengetter(pair) == pygments.token.Error:
-            msg = "Unparsed value: '{}'"
-            raise SyntaxError(msg.format(_datagetter(pair)))
-
-
 def help_msg():
     print("Usage:")
     print("[your python] compiler.py [filename input] [filename output]")
@@ -70,6 +56,24 @@ def write_programm(bin_programm: Iterable[bytes], filename_out: str) -> int:
 # or check 'type' of instr (is need data for this)
 # Semantic Validation
 
+def process_node(node) -> tuple[int, int]:
+    byte_instr = None
+    byte_operand_left = None
+
+    if node.token == pygments.token.Keyword:
+        byte_instr = instruction_code_map[node.value]
+
+        if node.left is not None:
+            if is_hex(node.left.value):
+                byte_operand_left = int(node.left.value, base=16)
+
+            elif node.left.value.isdigit():
+                byte_operand_left = int(node.left.value, base=10)
+
+
+    return byte_instr, byte_operand_left
+
+
 def cmp_v2(tokens_splitted: Iterable[tuple[tuple, ...]]) -> tuple[bytes]:
     res = list()
     tree = list()
@@ -77,44 +81,30 @@ def cmp_v2(tokens_splitted: Iterable[tuple[tuple, ...]]) -> tuple[bytes]:
         node = token_tree.create_node(row)
         tree.append(node)
 
-
     for node in tree:
-        byte_instr = None
-        byte_operand_left = None
+        byte_instr, byte_operand_left = process_node(node)
+        try:
+            if byte_instr:
+                res.append(byte_instr.to_bytes())
 
+                if byte_operand_left:
+                    res.append(byte_operand_left.to_bytes())
 
-        if node.token == pygments.token.Keyword:
-            byte_instr = instruction_code_map[node.value]
-
-            #if node.value in "ld":
-                #if node.left.token == pygments.token.Number:
-                    #byte_operand_left = int(node.left.value, base=16)
-
-            if node.left is not None:
-                if is_hex(node.left.value):
-                    byte_operand_left = int(node.left.value, base=16)
-
-                elif node.left.value.isdigit():
-                    byte_operand_left = int(node.left.value, base=10)
-
-
-        if byte_instr:
-            res.append(byte_instr.to_bytes())
-
-            if byte_operand_left:
-                res.append(byte_operand_left.to_bytes())
-
-            #if byte_operand_right:
-                #res.append(byte_operand_right.to_bytes())
+                #if byte_operand_right:
+                    #res.append(byte_operand_right.to_bytes())
+        except OverflowError as err:
+            msg = "Maximum number is 255 (0xff)"
+            raise OverflowError(msg) from err
 
     return res
 
 
 def compile(filename_in: str, filename_out: str):
-    raw_data = open(filename_in, "r").read()
-    tokens = tuple(SapLexer().get_tokens(raw_data))
-    error_validator(tokens)
+    raw_data: str = open(filename_in, "r").read()
+    tokens: tuple = tuple(SapLexer().get_tokens(raw_data))
+    validators.error_validator(tokens)
     tokens_splitted = convert_to_rows(tokens)
+    validators.semantic_validator(tokens_splitted)
 
 
     bin_programm = cmp_v2(tokens_splitted)

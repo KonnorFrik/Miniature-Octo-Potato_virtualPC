@@ -5,6 +5,6 @@
 
 #include "memory.hpp"
 
-void load_rom_to_mem(const std::string&, Memory&);
+int load_rom_to_mem(const std::string& filename, Memory& mem);
 
 #endif

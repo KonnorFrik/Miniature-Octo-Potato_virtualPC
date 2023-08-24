@@ -99,15 +99,13 @@ def create_node(pair) -> Node:
     res = None
     match pair:
         case ((pgm.token.Keyword as tkn_type, str() as tkn_str), (pgm.token.Number as tkn_oper_type, str() as operand_str)):
-            #print("Token:", tkn_str, ",Op:", operand_str)
             res = Node(token=tkn_type, value=tkn_str)
             res.ladd(Node(token=tkn_oper_type, value=operand_str))
 
         case ((pgm.token.Keyword as tkn_type, str() as tkn_str),):
-            #print("Token:", tkn_str, ", Op:", "NONE")
             res = Node(token=tkn_type, value=tkn_str)
 
-        case _:
+        case _: #unreachable
             raise Exception(f"Unknown token found: '{tkn_str}:{operand_str}'")
 
     return res
