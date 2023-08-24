@@ -64,11 +64,18 @@ def process_node(node) -> tuple[int, int]:
         byte_instr = instruction_code_map[node.value]
 
         if node.left is not None:
+            base_ = None
+
             if is_hex(node.left.value):
-                byte_operand_left = int(node.left.value, base=16)
+                base_ = 16
 
             elif node.left.value.isdigit():
-                byte_operand_left = int(node.left.value, base=10)
+                base_ = 10
+
+            else:
+                raise Exception("Unknown type of operand: {}".format(node.left.value))
+
+            byte_operand_left = int(node.left.value, base=base_)
 
 
     return byte_instr, byte_operand_left
@@ -104,6 +111,8 @@ def compile(filename_in: str, filename_out: str):
     tokens: tuple = tuple(SapLexer().get_tokens(raw_data))
     validators.error_validator(tokens)
     tokens_splitted = convert_to_rows(tokens)
+    #for t in tokens_splitted:
+        #print(t)
     validators.semantic_validator(tokens_splitted)
 
 

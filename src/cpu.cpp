@@ -105,8 +105,21 @@ void CPU::execute() {
             this->A /= buf;
             break;
 
+        case (AND):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - AND, data: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->A &= buf;
+            break;
+
         case (HLT):
-            
             if (DEBUG) {
                 std::cout << " - HLT" << std::endl;
             }
