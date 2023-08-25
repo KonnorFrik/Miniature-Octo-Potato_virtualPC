@@ -6,6 +6,8 @@ from instructions import *
 __non_operandable_instructions = [
     hlt_,
     inv_,
+    sav_,
+    swp_,
 ]
 
 class SemanticError(Exception):

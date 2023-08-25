@@ -89,12 +89,13 @@ def cmp_v2(tokens_splitted: Iterable[tuple[tuple, ...]]) -> tuple[bytes]:
         tree.append(node)
 
     for node in tree:
+        #print(node)
         byte_instr, byte_operand_left = process_node(node)
         try:
             if byte_instr:
                 res.append(byte_instr.to_bytes())
 
-                if byte_operand_left:
+                if byte_operand_left or node.left is not None:
                     res.append(byte_operand_left.to_bytes())
 
                 #if byte_operand_right:
@@ -103,6 +104,7 @@ def cmp_v2(tokens_splitted: Iterable[tuple[tuple, ...]]) -> tuple[bytes]:
             msg = "Maximum number is 255 (0xff)"
             raise OverflowError(msg) from err
 
+    #print(res)
     return res
 
 

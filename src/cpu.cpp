@@ -49,6 +49,26 @@ void CPU::execute() {
             this->A = buf;
             break;
 
+        case (SAV):
+            if (DEBUG) {
+                std::cout << " - SAV"
+                    << std::endl;
+            }
+
+            this->DS = this->A;
+            break;
+
+        case (SWP):
+            if (DEBUG) {
+                std::cout << " - SWP"
+                    << std::endl;
+            }
+
+            buf = this->DS;
+            this->DS = this->A;
+            this->A = buf;
+            break;
+
         case (ADD):
             buf = load_data();
 
@@ -169,6 +189,52 @@ void CPU::execute() {
             this->A = ~this->A;
             break;
 
+        case (JMP):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - JMP, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->PC = buf;
+            break;
+
+        case (JEZ):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - JEZ, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            if (this->A == 0) {
+                this->PC = buf;
+            }
+            break;
+
+        case (JNZ):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - JNZ, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            if (this->A != 0) {
+                this->PC = buf;
+            }
+            break;
+
         case (HLT):
             if (DEBUG) {
                 std::cout << " - HLT" << std::endl;
@@ -209,15 +275,30 @@ void CPU::run() {
 }
 
 void CPU::dump() {
-    std::cout << "Start Address: " << std::hex << static_cast<short>(this->start_addr) << std::dec << std::endl;
-    std::cout << "PC: " << std::hex << static_cast<short>(this->PC) << std::dec << std::endl;
-    std::cout << "instruction: " << std::hex << static_cast<short>(this->instruction) << std::dec
-              << std::endl;
-    std::cout << "run_bit: " << std::hex << this->run_bit << std::dec << std::endl;
+    std::cout << "Start Address: "
+        << std::hex << static_cast<short>(this->start_addr)
+        << std::dec << std::endl;
+
+    std::cout << "PC: "
+        << std::hex << static_cast<short>(this->PC)
+        << std::dec << std::endl;
+
+    std::cout << "instruction: "
+        << std::hex << static_cast<short>(this->instruction)
+        << std::dec << std::endl;
+
+    std::cout << "run_bit: " << this->run_bit << std::endl;
     std::cout << "debug mode: " << this->mode << std::endl;
-    //std::cout << "data: " << std::hex << static_cast<short>(this->data) << std::dec << std::endl;
-    std::cout << "A: hex(" << std::hex << static_cast<short>(this->A) << std::dec << ") dec("
-              << static_cast<short>(this->A) << ")" << std::endl;
+
+    std::cout << "A: hex("
+        << std::hex << static_cast<short>(this->A)
+        << std::dec << ") dec(" << static_cast<short>(this->A)
+        << ")" << std::endl;
+
+    std::cout << "DS: hex("
+        << std::hex << static_cast<short>(this->DS)
+        << std::dec << ") dec(" << static_cast<short>(this->DS)
+        << ")" << std::endl;
 }
 
 void CPU::set_start_addr(const Byte& addr) {

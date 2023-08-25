@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
     Memory memory(size);
 
     Byte start_addr{0};
-    load_rom_to_mem(filename, memory, size, start_addr);
+    load_rom_to_mem(filename, memory, start_addr);
 
     CPU cpu(memory, start_addr);
     if (cpu_debug_flag) {

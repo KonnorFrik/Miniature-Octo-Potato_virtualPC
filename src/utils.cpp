@@ -8,7 +8,8 @@
 #include "settings.hpp"
 #include "utils.hpp"
 
-int load_rom_to_mem(const std::string& filename, Memory& mem, int mem_size, Byte& start_addr_out) {
+//int load_rom_to_mem(const std::string& filename, Memory& mem, int mem_size, Byte& start_addr_out) {
+int load_rom_to_mem(const std::string& filename, Memory& mem, Byte& start_addr_out) {
     std::ifstream file(filename, std::ios::in | std::ios::binary | std::ios::ate);
     std::streampos size;
 
@@ -17,7 +18,8 @@ int load_rom_to_mem(const std::string& filename, Memory& mem, int mem_size, Byte
 
     if (file.is_open()) {
         size = file.tellg();
-        start_addr_out = rand() % (mem_size - size);
+        //start_addr_out = rand() % (mem_size - size);
+        start_addr_out = 0;
         memblock = new char[size];
         file.seekg(0, std::ios::beg);
         file.read(memblock, size);
