@@ -106,6 +106,6 @@ def create_node(pair) -> Node:
             res = Node(token=tkn_type, value=tkn_str)
 
         case _: #unreachable
-            raise Exception(f"Unknown token found: '{tkn_str}:{operand_str}'")
+            raise Exception(f"Unknown token found in: '{pair}'")
 
     return res
