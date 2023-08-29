@@ -45,4 +45,25 @@ instruction_code_map = {
     hlt_: 0xff,
 }
 
+instruction_code_map_mod = {
+    # register manipulating
+    ld_: 0x04,
+    sav_: 0x05,
+    swp_: 0x06,
 
+    # math
+    add_: 0x15,
+    sub_: 0x16,
+    mul_: 0x17,
+    div_: 0x18,
+
+    # logic
+    and_: 0x24,
+    or_ : 0x25,
+    xor_: 0x26,
+
+    # memory
+    jmp_: 0x33,
+    jez_: 0x34,
+    jnz_: 0x35,
+}

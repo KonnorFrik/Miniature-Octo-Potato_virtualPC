@@ -33,6 +33,7 @@ void CPU::execute() {
     }
 
     Byte buf;
+    Byte addr;
 
     switch (this->instruction) {
         case (LD):
@@ -124,20 +125,6 @@ void CPU::execute() {
 
             this->A /= buf;
             break;
-
-        //case (NEG):
-            //buf = load_data();
-//
-            //if (DEBUG) {
-                //std::cout << " - NEG"
-                    //<< std::hex
-                    //<< static_cast<short>(buf)
-                    //<< std::dec
-                    //<< std::endl;
-            //}
-//
-            //this->A = -this->A;
-            //break;
 
         case (AND):
             buf = load_data();
@@ -243,6 +230,194 @@ void CPU::execute() {
             this->run_bit = false;
             break;
 
+        case (LD_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - LD_M, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->A = this->memory[buf];
+            break;
+
+        case (SAV_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - SAV_M, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->memory[buf] = this->A;
+            break;
+
+        case (SWP_M):
+            addr = load_data();
+
+            if (DEBUG) {
+                std::cout << " - SWP_M, addr: "
+                    << std::hex
+                    << static_cast<short>(addr)
+                    << std::dec
+                    << std::endl;
+            }
+
+            buf = this->memory[addr];
+            this->memory[addr] = this->A;
+            this->A = buf;
+            break;
+
+        case (ADD_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - ADD_M, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->A += this->memory[buf];
+            break;
+
+        case (SUB_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - SUB_M, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->A -= this->memory[buf];
+            break;
+
+        case (MUL_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - MUL_M, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->A *= this->memory[buf];
+            break;
+
+        case (DIV_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - DIV_M, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->A /= this->memory[buf];
+            break;
+
+        case (AND_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - AND_M, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->A &= this->memory[buf];
+            break;
+
+        case (OR_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - OR_M, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->A |= this->memory[buf];
+            break;
+
+        case (XOR_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - XOR_M, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->A ^= this->memory[buf];
+            break;
+
+        case (JMP_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - JMP_M, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            this->PC = this->memory[buf];
+            break;
+
+        case (JEZ_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - JEZ_M, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            if (this->A == 0) {
+                this->PC = this->memory[buf];
+            }
+            break;
+
+        case (JNZ_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - JNZ_M, addr: "
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << std::endl;
+            }
+
+            if (this->A != 0) {
+                this->PC = this->memory[buf];
+            }
+            break;
+
         default:
             if (DEBUG) {
                 std::cout << " - Unknown instruction" << std::endl;
@@ -290,14 +465,14 @@ void CPU::dump() {
     std::cout << "run_bit: " << this->run_bit << std::endl;
     std::cout << "debug mode: " << this->mode << std::endl;
 
-    std::cout << "A: hex("
-        << std::hex << static_cast<short>(this->A)
-        << std::dec << ") dec(" << static_cast<short>(this->A)
-        << ")" << std::endl;
-
     std::cout << "DS: hex("
         << std::hex << static_cast<short>(this->DS)
         << std::dec << ") dec(" << static_cast<short>(this->DS)
+        << ")" << std::endl;
+
+    std::cout << "A: hex("
+        << std::hex << static_cast<short>(this->A)
+        << std::dec << ") dec(" << static_cast<short>(this->A)
         << ")" << std::endl;
 }
 

@@ -6,6 +6,7 @@ class Node:
     def __init__(self, token, value):
         self.token = token
         self.value = value
+        self.is_mem_access = False
         self._left = None
         self._right = None
 
@@ -40,7 +41,7 @@ class Node:
 
     def __repr__(self):
         cls_name = type(self).__name__
-        return "{}(token='{}', value='{}')".format(cls_name, self.token, self.value)
+        return "{}(token='{}', value='{}', is_mem_access='{}')".format(cls_name, self.token, self.value, self.is_mem_access)
 
     def radd(self, value):
         if not isinstance(value, type(self)):
@@ -98,11 +99,19 @@ def build_tree(row):
 def create_node(pair) -> Node:
     res = None
     match pair:
-        case ((pgm.token.Keyword as tkn_type, str() as tkn_str), (pgm.token.Number as tkn_oper_type, str() as operand_str)):
+        case ((pgm.token.Keyword as tkn_type, str() as tkn_str), (pgm.token.Number as tkn_operand_type, str() as operand_str)):
             res = Node(token=tkn_type, value=tkn_str)
-            res.ladd(Node(token=tkn_oper_type, value=operand_str))
+            res.ladd(Node(token=tkn_operand_type, value=operand_str))
+
+        case ((pgm.token.Keyword as tkn_type, str() as tkn_str), (pgm.token.Operator.Access, str()), (pgm.token.Number as tkn_operand_type, str() as operand_str)):
+            res = Node(token=tkn_type, value=tkn_str)
+            res.is_mem_access = True
+            res.ladd(Node(token=tkn_operand_type, value=operand_str))
 
         case ((pgm.token.Keyword as tkn_type, str() as tkn_str),):
+            res = Node(token=tkn_type, value=tkn_str)
+
+        case ((pgm.token.Number as tkn_type, str() as tkn_str),):
             res = Node(token=tkn_type, value=tkn_str)
 
         case _: #unreachable

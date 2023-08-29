@@ -9,6 +9,8 @@ import token_tree
 import operator as op
 import pygments
 
+DEBUG = 0
+
 #_tokengetter = op.itemgetter(0)
 #_datagetter = op.itemgetter(1)
 
@@ -42,6 +44,7 @@ def help_msg():
 
 def write_programm(bin_programm: Iterable[bytes], filename_out: str) -> int:
     writed = 0
+
     with open(filename_out, "wb") as file:
         for byte in bin_programm:
             file.write(byte)
@@ -50,33 +53,49 @@ def write_programm(bin_programm: Iterable[bytes], filename_out: str) -> int:
     return writed
 
 
-#TODO
-# try convert str inst to bin immediately with mapping
-# ? on exception KeyError and try convert to hex like data it is
-# or check 'type' of instr (is need data for this)
-# Semantic Validation
+def process_num(node) -> int:
+    if is_hex(node.value):
+        base_ = 16
+
+    elif node.value.isdigit():
+        base_ = 10
+
+    else:
+        raise Exception("Unknown type of operand: {}".format(node.value))
+
+    try:
+        res = int(node.value, base=base_)
+
+    except OverflowError as err:
+        msg = "Maximum number is 255 (0xff)"
+        raise OverflowError(msg) from err
+
+    return res
+
+
+def process_instruction(node) -> int:
+    res = None
+    if node.is_mem_access:
+        res = instruction_code_map_mod[node.value]
+
+    else:
+        res = instruction_code_map[node.value]
+
+    return res
+
 
 def process_node(node) -> tuple[int, int]:
     byte_instr = None
     byte_operand_left = None
 
     if node.token == pygments.token.Keyword:
-        byte_instr = instruction_code_map[node.value]
+        byte_instr = process_instruction(node)
 
         if node.left is not None:
-            base_ = None
+            byte_operand_left = process_num(node.left)
 
-            if is_hex(node.left.value):
-                base_ = 16
-
-            elif node.left.value.isdigit():
-                base_ = 10
-
-            else:
-                raise Exception("Unknown type of operand: {}".format(node.left.value))
-
-            byte_operand_left = int(node.left.value, base=base_)
-
+    elif node.token == pygments.token.Number:
+        byte_operand_left = process_num(node)
 
     return byte_instr, byte_operand_left
 
@@ -84,42 +103,62 @@ def process_node(node) -> tuple[int, int]:
 def cmp_v2(tokens_splitted: Iterable[tuple[tuple, ...]]) -> tuple[bytes]:
     res = list()
     tree = list()
+
     for row in tokens_splitted:
         node = token_tree.create_node(row)
         tree.append(node)
 
     for node in tree:
-        #print(node)
+        if DEBUG:
+            print(node)
+
         byte_instr, byte_operand_left = process_node(node)
-        try:
-            if byte_instr:
-                res.append(byte_instr.to_bytes())
 
-                if byte_operand_left or node.left is not None:
-                    res.append(byte_operand_left.to_bytes())
+        if byte_instr is not None:
+            res.append(byte_instr.to_bytes())
 
-                #if byte_operand_right:
-                    #res.append(byte_operand_right.to_bytes())
-        except OverflowError as err:
-            msg = "Maximum number is 255 (0xff)"
-            raise OverflowError(msg) from err
+        if byte_operand_left is not None: # node left for prevent logic error if operand is 0 (zero)
+            res.append(byte_operand_left.to_bytes())
 
-    #print(res)
+        #if byte_operand_right:
+            #res.append(byte_operand_right.to_bytes())
+
+        if DEBUG:
+            print("instr:", byte_instr)
+            print("operand:", byte_operand_left)
+
     return res
 
 
+def preprocessor():
+    ...
+
+def get_raw_data(filename: str):
+    raw_data_lines: list = open(filename_in, "r").readlines()
+    buf = list()
+
+    for line in raw_data_lines:
+        if line == "\n" or line == "" or line.startswith("#"):
+            continue
+
+        buf.append(line)
+
+    raw_data = "".join(buf)
+    return raw_data
+
+
 def compile(filename_in: str, filename_out: str):
-    raw_data: str = open(filename_in, "r").read()
+    raw_data: str = get_raw_data(filename_in)
     tokens: tuple = tuple(SapLexer().get_tokens(raw_data))
     validators.error_validator(tokens)
     tokens_splitted = convert_to_rows(tokens)
-    #for t in tokens_splitted:
-        #print(t)
+
+    if DEBUG:
+        for t in tokens_splitted:
+            print(t)
+
     validators.semantic_validator(tokens_splitted)
-
-
     bin_programm = cmp_v2(tokens_splitted)
-
     writed = write_programm(bin_programm, filename_out)
 
     print("Writed:", writed, "bytes to:", filename_out)
