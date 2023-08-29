@@ -4,14 +4,14 @@
 |                                     Install                                                   |
 |Compiled programm will be in the 'bin' folder                                                  |
 |Usage:                                                                                         |
-|   make install                                                                                |
+|   make                                                                                        |
 |===============================================================================================|
 |                                  Architecture                                                 |
 |CPU:                                                                                           |
 |    registers:                                                                                 |
 |        A(accumulator): 8-bit - all math and bitwise operations results store here             |
-|        DC: 8-bit - for store data from register A. Can't be writed or readed directly         |
-|        PC aka Instruction pointer: 8-bit - store address of next instruction in memory        |
+|        DS: 8-bit - for store data from register A. Can't be writed or readed directly         |
+|        PC (Programm Counter): 8-bit - store address of next instruction in memory             |
 |Memory:                                                                                        |
 |    8-bit for one cell                                                                         |
 |===============================================================================================|
@@ -32,17 +32,17 @@
 |Simple terminal editor                                                                         |
 |for more info use '@help' in editor                                                            |
 |Usage:                                                                                         |
-|    python editor.py [-s | --size <num>] | [-b | --binary]                                     |
+|    python editor.py [-s | --size <num>] | [-b | --binary] | [-h]                              |
 |===============================================================================================|
 |                                    Language                                                   |
 |                                   &                                                           |
 |                                    Instructions                                               |
-| [KEYWORD] [NUMBER]                                                                            |
+| [KEYWORD] [OPERATOR] [NUMBER]                                                                 |
 |                                                                                               |
 |Keywords:                                                                                      |
-|   ld [num] - load 'num' to A register                                                         | 
-|   sav - save data from A register to DS                                                       |
-|   swp - swap data in A and DS registers                                                       |
+|   ld  [num] - load 'num' to A register                                                        | 
+|   sav       - save data from A register to DS                                                 |
+|   swp       - swap data in A and DS registers                                                 |
 |                                                                                               |
 |   add [num] - result of sum of 'num' and data in A put in A                                   |
 |   sub [num] - result of subtract of 'num' and data in A put in A                              |
@@ -50,15 +50,26 @@
 |   div [num] - result of division of 'num' and data in A put in A                              |
 |                                                                                               |
 |   and [num] - result of bitswise AND of 'num' and data in A put in A                          |
-|   or [num] - result of bitswise OR of 'num' and data in A put in A                            |
+|   or  [num] - result of bitswise OR of 'num' and data in A put in A                           |
 |   xor [num] - result of bitswise XOR of 'num' and data in A put in A                          |
-|   inv - bitswise INVERT A register                                                            |
+|   inv       - bitswise INVERT A register                                                      |
 |                                                                                               |
 |   jmp [num] - jump to addr 'num'                                                              |
 |   jez [num] - jump to addr 'num' if A = 0                                                     |
 |   jnz [num] - jump to addr 'num' if A not = 0                                                 |
-|   hlt - halt, set 'run bit' to 0/false and exit                                               |
+|   hlt       - halt, set 'run bit' to 0/false and exit                                         |
 |                                                                                               |
 |Number:                                                                                        |
 |   any number between 0 and 255 in decimal or hexadecimal format                               |
+|                                                                                               |
+|Operators:                                                                                     |
+|   $ - Memory access operator                                                                  |
+|       Provides access to a memory location to read/write values                               |
+|       Used with: ld, sav, swp, add, sub, mul, div, and, or, xor, jmp, jez, jnz                |
+|       Exmp: "ld $n" - load to register A value from memory cell with address 'n'              |
+|===============================================================================================|
+|                                       Notes                                                   |
+|   - Compiler can compile a number without instruction                                         |
+|       Can be used as static data in programm                                                  |
+|       Be carefully with numbers in middle of the programm                                     |
 |===============================================================================================|
