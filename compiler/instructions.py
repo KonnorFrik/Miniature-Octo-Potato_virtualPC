@@ -11,6 +11,8 @@ and_ = "and"
 or_ = "or"
 xor_ = "xor"
 inv_ = "inv"
+lsh_ = "lsh"
+rsh_ = "rsh"
 
 jmp_ = "jmp"
 jez_ = "jez"
@@ -36,6 +38,8 @@ instruction_code_map = {
     or_ : 0x21,
     xor_: 0x22,
     inv_: 0x23,
+    lsh_: 0x27,
+    rsh_: 0x28,
 
     # memory
     jmp_: 0x30,
@@ -61,6 +65,8 @@ instruction_code_map_mod = {
     and_: 0x24,
     or_ : 0x25,
     xor_: 0x26,
+    lsh_: 0x29,
+    rsh_: 0x2a,
 
     # memory
     jmp_: 0x33,

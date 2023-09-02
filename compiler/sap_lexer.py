@@ -21,6 +21,8 @@ class SapLexer(RegexLexer):
             (r"^\s*or", token.Keyword),
             (r"^\s*xor", token.Keyword),
             (r"^\s*inv", token.Keyword),
+            (r"^\s*lsh", token.Keyword),
+            (r"^\s*rsh", token.Keyword),
 
             (r"^\s*jmp", token.Keyword),
             (r"^\s*jez", token.Keyword),

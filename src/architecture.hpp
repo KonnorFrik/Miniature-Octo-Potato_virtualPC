@@ -27,10 +27,14 @@ static const Byte AND = 0x20;  // A = A & num
 static const Byte OR = 0x21;   // A = A | num
 static const Byte XOR = 0x22;  // A = A ^ num
 static const Byte INV = 0x23;  // A = ~A
+static const Byte LSH = 0x27;  // A = A << num
+static const Byte RSH = 0x28;  // A = A >> num
 
 static const Byte AND_M = 0x24;  // A = A & mem
 static const Byte OR_M = 0x25;   // A = A | mem
 static const Byte XOR_M = 0x26;  // A = A ^ mem
+static const Byte LSH_M = 0x29;  // A = A << num
+static const Byte RSH_M = 0x2a;  // A = A >> num
 
 static const Byte JMP = 0x30;
 static const Byte JEZ = 0x31;

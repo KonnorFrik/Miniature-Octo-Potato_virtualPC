@@ -213,6 +213,42 @@ void CPU::execute() {
             this->A = ~this->A;
             break;
 
+        case (LSH):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - LSH, data: "
+                    << "hex("
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << "), dec("
+                    << static_cast<short>(buf)
+                    << ")"
+                    << std::endl;
+            }
+
+            this->A <<= buf;
+            break;
+
+        case (RSH):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - RSH, data: "
+                    << "hex("
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << "), dec("
+                    << static_cast<short>(buf)
+                    << ")"
+                    << std::endl;
+            }
+
+            this->A >>= buf;
+            break;
+
         case (JMP):
             buf = load_data() + this->start_addr;
 
@@ -459,6 +495,42 @@ void CPU::execute() {
             }
 
             this->A ^= this->memory[buf];
+            break;
+
+        case (LSH_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - LSH_M, addr: "
+                    << "hex("
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << "), dec("
+                    << static_cast<short>(buf)
+                    << ")"
+                    << std::endl;
+            }
+
+            this->A <<= this->memory[buf];
+            break;
+
+        case (RSH_M):
+            buf = load_data();
+
+            if (DEBUG) {
+                std::cout << " - RSH_M, addr: "
+                    << "hex("
+                    << std::hex
+                    << static_cast<short>(buf)
+                    << std::dec
+                    << "), dec("
+                    << static_cast<short>(buf)
+                    << ")"
+                    << std::endl;
+            }
+
+            this->A >>= this->memory[buf];
             break;
 
         case (JMP_M):
