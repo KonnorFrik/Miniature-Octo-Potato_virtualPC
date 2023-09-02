@@ -32,7 +32,7 @@ class CPU {
     void run();
     void dump();
     void switch_mode();
-    void set_start_addr(const Byte&);
+    //void set_start_addr(const Byte&);
 };
 
 #endif

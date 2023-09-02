@@ -43,7 +43,7 @@ def semantic_validator(pairs: Iterable):
                 msg = "Line: {}: After '{}' cannot be number".format(str_count, instr)
                 raise SemanticError(msg)
 
-            # "all operandable" ___
+            # "all operandable" without operand
             case ((pygments.token.Keyword, str() as instr),) if instr not in __non_operandable_instructions:
                 msg = "Line {}: Missings operand after: {}".format(str_count, instr)
                 raise SemanticError(msg)

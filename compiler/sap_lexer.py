@@ -27,10 +27,10 @@ class SapLexer(RegexLexer):
             (r"^\s*jnz", token.Keyword),
 
             (r"^\s*hlt", token.Keyword),
+
             (r"0x[0-9abcdef]+", token.Number),
             (r"\d+", token.Number),
 
-            #(r"\$0x[0-9abcdef]+|\$\d+", token.Operator.Access),
             (r"\$", token.Operator.Access),
 
             (r"\s", token.Whitespace),

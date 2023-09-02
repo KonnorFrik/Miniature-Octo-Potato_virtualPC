@@ -18,6 +18,9 @@ cpu: cpu.o memory.o
 memory: memory.o
 > $(cmp) $? -o $(build_dir)/$@
 
+debug: $(src_dir)/main.cpp $(src_dir)/cpu.cpp $(src_dir)/memory.cpp $(src_dir)/utils.cpp 
+> $(cmp) $(w_flags) $(flags) -g $? -o $(build_dir)/$@
+
 clean:
 > rm -f *.o
 

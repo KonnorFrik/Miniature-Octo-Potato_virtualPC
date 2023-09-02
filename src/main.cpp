@@ -55,25 +55,31 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    if (DEBUG) {
-        std::cout << "[DEBUG]" << std::endl;
-        std::cout << "\tthis programm: " << this_prog_name << std::endl;
-        std::cout << "\tFilename: " << filename << std::endl;
-        std::cout << "\tCpu debug: " << cpu_debug_flag << std::endl;
-        std::cout << std::endl;
-    }
-
-    int size = pow(2, CPU_BITS);
-    Memory memory(size);
+    int mem_size = pow(2, CPU_BITS);
+    Memory memory(mem_size);
 
     Byte start_addr{0};
-    load_rom_to_mem(filename, memory, start_addr);
+    int status = load_rom_to_mem(filename, memory, mem_size, start_addr);
+
+    if (status) {
+        std::cout << "Can't load programm. Exit" << std::endl;
+        return status;
+    }
 
     CPU cpu(memory, start_addr);
     if (cpu_debug_flag) {
         cpu.switch_mode();
     }
-    cpu.set_start_addr(start_addr);
+
+    if (DEBUG) {
+        std::cout << "[DEBUG]" << std::endl;
+        std::cout << "\tthis programm: " << this_prog_name << std::endl;
+        std::cout << "\tFilename: " << filename << std::endl;
+        std::cout << "\tCpu debug: " << cpu_debug_flag << std::endl;
+        std::cout << "\tStart address in header: " << static_cast<int>(start_addr) << std::endl;
+        std::cout << std::endl;
+    }
+
     cpu.run();
 
     std::cout << std::endl;
@@ -83,5 +89,6 @@ int main(int argc, char* argv[]) {
     std::cout << std::endl;
     std::cout << "\tCPU Dump" << std::endl;
     cpu.dump();
-    return 0;
+
+    return status;
 }

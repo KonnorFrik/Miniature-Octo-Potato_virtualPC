@@ -22,7 +22,6 @@ static const Byte ADD_M = 0x15;  // A = A + mem
 static const Byte SUB_M = 0x16;  // A = A - mem
 static const Byte MUL_M = 0x17;  // A = A * mem
 static const Byte DIV_M = 0x18;  // A = A / mem
-//static const Byte NEG = 0x15;  // /
 
 static const Byte AND = 0x20;  // A = A & num
 static const Byte OR = 0x21;   // A = A | num
@@ -42,5 +41,8 @@ static const Byte JEZ_M = 0x34;
 static const Byte JNZ_M = 0x35;
 
 static const Byte HLT = 0xff;
+
+
+static const int HEADER_SIZE = 16;
 
 #endif
