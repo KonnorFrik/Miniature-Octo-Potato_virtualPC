@@ -1,13 +1,15 @@
 #! /usr/local/bin/python3
 
-from sap_lexer import SapLexer
+import pygments
+import operator as op
 from typing import Iterable
+
+from sap_lexer import SapLexer
 from helps import is_hex, _tokengetter, _datagetter
 from instructions import *
 import validators
 import token_tree
-import operator as op
-import pygments
+import compiler_settings
 
 DEBUG = 0
 
@@ -55,9 +57,11 @@ def write_programm(bin_programm: Iterable[bytes], filename_out: str) -> int:
 
 def process_num(node) -> int:
     if is_hex(node.value):
+    #if node.token == pygments.token.Number.Hex:
         base_ = 16
 
     elif node.value.isdigit():
+    #elif node.token == pygments.token.Number.Dec:
         base_ = 10
 
     else:
@@ -67,7 +71,7 @@ def process_num(node) -> int:
         res = int(node.value, base=base_)
 
     except OverflowError as err:
-        msg = "Maximum number is 255 (0xff)"
+        msg = "Maximum value for store is 255 (0xff)"
         raise OverflowError(msg) from err
 
     return res
@@ -94,6 +98,13 @@ def process_node(node) -> tuple[int, int]:
         if node.left is not None:
             byte_operand_left = process_num(node.left)
 
+    elif node.token == pygments.token.Keyword.Special:
+        if node.left is not None:
+            byte_instr = instruction_code_map[node.left.value]
+
+        else:
+            byte_instr = instruction_code_map[node.value]
+
     elif node.token == pygments.token.Number:
         byte_operand_left = process_num(node)
 
@@ -103,6 +114,7 @@ def process_node(node) -> tuple[int, int]:
 def cmp_v2(tokens_splitted: Iterable[tuple[tuple, ...]]) -> tuple[bytes]:
     res = list()
     tree = list()
+    header = [int(0).to_bytes() for _ in range(compiler_settings.HEADER_SIZE)]
 
     for row in tokens_splitted:
         node = token_tree.create_node(row)
@@ -127,7 +139,7 @@ def cmp_v2(tokens_splitted: Iterable[tuple[tuple, ...]]) -> tuple[bytes]:
             print("instr:", byte_instr)
             print("operand:", byte_operand_left)
 
-    return res
+    return tuple(header + res)
 
 
 def preprocessor():

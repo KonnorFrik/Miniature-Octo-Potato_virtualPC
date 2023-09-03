@@ -12,6 +12,7 @@
 |        A(accumulator): 8-bit - all math and bitwise operations results store here             |
 |        DS: 8-bit - for store data from register A. Can't be writed or readed directly         |
 |        PC (Programm Counter): 8-bit - store address of next instruction in memory             |
+|        MP (Memory Pointer): 8-bit - store address for read/write operations                   |
 |Memory:                                                                                        |
 |    8-bit for one cell                                                                         |
 |===============================================================================================|
@@ -37,27 +38,38 @@
 |                                    Language                                                   |
 |                                   &                                                           |
 |                                    Instructions                                               |
-| [KEYWORD] [OPERATOR] [NUMBER]                                                                 |
+| [KEYWORD] [[OPERATOR] [NUMBER] | SPECIAL_OPERAND]                                             |
 |                                                                                               |
 |Keywords:                                                                                      |
-|   ld  [num] - load 'num' to A register                                                        | 
-|   sav       - save data from A register to DS                                                 |
-|   swp       - swap data in A and DS registers                                                 |
+|   all in square brackets are optional                                                         |
 |                                                                                               |
-|   add [num] - result of sum of 'num' and data in A put in A                                   |
-|   sub [num] - result of subtract of 'num' and data in A put in A                              |
-|   mul [num] - result of multiplication of 'num' and data in A put in A                        |
-|   div [num] - result of division of 'num' and data in A put in A                              |
+|   ao - access operator                                                                        |
 |                                                                                               |
-|   and [num] - result of bitswise AND of 'num' and data in A put in A                          |
-|   or  [num] - result of bitswise OR of 'num' and data in A put in A                           |
-|   xor [num] - result of bitswise XOR of 'num' and data in A put in A                          |
-|   inv       - bitswise INVERT A register                                                      |
+|   ld  [ao] [num | addr] - load 'num' to A register                                            | 
+|   sav [ao] [num | addr] - save data from A register to DS                                     |
+|   swp [ao] [num | addr] - swap data in A and DS registers                                     |
 |                                                                                               |
-|   jmp [num] - jump to addr 'num'                                                              |
-|   jez [num] - jump to addr 'num' if A = 0                                                     |
-|   jnz [num] - jump to addr 'num' if A not = 0                                                 |
-|   hlt       - halt, set 'run bit' to 0/false and exit                                         |
+|   add [ao] [num | addr] - result of sum of 'num' and data in A put in A                       |
+|   sub [ao] [num | addr] - result of subtract of 'num' and data in A put in A                  |
+|   mul [ao] [num | addr] - result of multiplication of 'num' and data in A put in A            |
+|   div [ao] [num | addr] - result of division of 'num' and data in A put in A                  |
+|                                                                                               |
+|   and [ao] [num | addr] - result of bitswise AND of 'num' and data in A put in A              |
+|   or  [ao] [num | addr] - result of bitswise OR of 'num' and data in A put in A               |
+|   xor [ao] [num | addr] - result of bitswise XOR of 'num' and data in A put in A              |
+|   inv                   - bitswise INVERT A register                                          |
+|   lsh [ao] [num | addr] - bitwise shifting the A register to left                             |
+|   rsh [ao] [num | addr] - bitwise shifting the A register to right                            |
+|                                                                                               |
+|   jmp [ao] [addr]       - jump to addr 'num'                                                  |
+|   jez [ao] [addr]       - jump to addr 'num' if A = 0                                         |
+|   jnz [ao] [addr]       - jump to addr 'num' if A not = 0                                     |
+|   mem inc               - result of MP reg plus A writed to MP (MP = MP + A)                  |
+|   mem dec               - result of MP reg subtract A writed to MP (MP = MP - A)              |
+|   mem set               - move value from A register to MP (MP = A)                           |
+|   read                  - move value to A reg from memory with address stored in MP reg       |
+|   write                 - move value from A reg to memory with address stored in MP reg       |
+|   hlt                   - halt, set 'run bit' to 0/false and exit                             |
 |                                                                                               |
 |Number:                                                                                        |
 |   any number between 0 and 255 in decimal or hexadecimal format                               |
@@ -67,6 +79,14 @@
 |       Provides access to a memory location to read/write values                               |
 |       Used with: ld, sav, swp, add, sub, mul, div, and, or, xor, jmp, jez, jnz                |
 |       Exmp: "ld $n" - load to register A value from memory cell with address 'n'              |
+|                                                                                               |
+|Special Operand:                                                                               |
+|   inc, dec, set - Fake operands for define one-byte code instruction                          |
+|===============================================================================================|
+|                                  Memory Addressing                                            |
+|Emulator have relative memory addressing. That mean if in your programm writed "jmp 0x01" and  |
+|   in header of programm 'start offset' is '0x02' the real address for intstruction will be    |
+|   'address + offset' (0x01 + 0x02)                                                            |
 |===============================================================================================|
 |                                       Notes                                                   |
 |   - Compiler can compile a number without instruction                                         |

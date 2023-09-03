@@ -99,9 +99,18 @@ def build_tree(row):
 def create_node(pair) -> Node:
     res = None
     match pair:
-        case ((pgm.token.Keyword as tkn_type, str() as tkn_str), (pgm.token.Number as tkn_operand_type, str() as operand_str)):
+        case ((pgm.token.Keyword as tkn_type, str() as tkn_str),
+              (pgm.token.Number as tkn_operand_type, str() as operand_str)):
             res = Node(token=tkn_type, value=tkn_str)
             res.ladd(Node(token=tkn_operand_type, value=operand_str))
+
+        case ((pgm.token.Keyword.Special as tkn_type, str() as tkn_str),
+              (pgm.token.Keyword.Special.Operand as tkn_operand_type, str() as operand_str)):
+            res = Node(token=tkn_type, value=tkn_str)
+            res.ladd(Node(token=tkn_operand_type, value=operand_str))
+
+        case ((pgm.token.Keyword.Special as tkn_type, str() as tkn_str),):
+            res = Node(token=tkn_type, value=tkn_str)
 
         case ((pgm.token.Keyword as tkn_type, str() as tkn_str), (pgm.token.Operator.Access, str()), (pgm.token.Number as tkn_operand_type, str() as operand_str)):
             res = Node(token=tkn_type, value=tkn_str)

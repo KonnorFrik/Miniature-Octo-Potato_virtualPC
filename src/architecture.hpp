@@ -22,16 +22,19 @@ static const Byte ADD_M = 0x15;  // A = A + mem
 static const Byte SUB_M = 0x16;  // A = A - mem
 static const Byte MUL_M = 0x17;  // A = A * mem
 static const Byte DIV_M = 0x18;  // A = A / mem
-//static const Byte NEG = 0x15;  // /
 
 static const Byte AND = 0x20;  // A = A & num
 static const Byte OR = 0x21;   // A = A | num
 static const Byte XOR = 0x22;  // A = A ^ num
 static const Byte INV = 0x23;  // A = ~A
+static const Byte LSH = 0x27;  // A = A << num
+static const Byte RSH = 0x28;  // A = A >> num
 
 static const Byte AND_M = 0x24;  // A = A & mem
 static const Byte OR_M = 0x25;   // A = A | mem
 static const Byte XOR_M = 0x26;  // A = A ^ mem
+static const Byte LSH_M = 0x29;  // A = A << num
+static const Byte RSH_M = 0x2a;  // A = A >> num
 
 static const Byte JMP = 0x30;
 static const Byte JEZ = 0x31;
@@ -41,6 +44,16 @@ static const Byte JMP_M = 0x33;
 static const Byte JEZ_M = 0x34;
 static const Byte JNZ_M = 0x35;
 
+static const Byte MEM_INC = 0x36;
+static const Byte MEM_DEC = 0x37;
+static const Byte MEM_SET = 0x38;
+
+static const Byte READ = 0x39;
+static const Byte WRITE = 0x3a;
+
 static const Byte HLT = 0xff;
+
+
+static const int HEADER_SIZE = 16;
 
 #endif
