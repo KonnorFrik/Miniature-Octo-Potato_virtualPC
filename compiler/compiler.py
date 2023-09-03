@@ -98,6 +98,13 @@ def process_node(node) -> tuple[int, int]:
         if node.left is not None:
             byte_operand_left = process_num(node.left)
 
+    elif node.token == pygments.token.Keyword.Special:
+        if node.left is not None:
+            byte_instr = instruction_code_map[node.left.value]
+
+        else:
+            byte_instr = instruction_code_map[node.value]
+
     elif node.token == pygments.token.Number:
         byte_operand_left = process_num(node)
 

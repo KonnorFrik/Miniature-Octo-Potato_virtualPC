@@ -18,6 +18,13 @@ jmp_ = "jmp"
 jez_ = "jez"
 jnz_ = "jnz"
 
+mem_ = "mem" # not used here
+mem_inc = "inc"
+mem_dec = "dec"
+mem_set = "set"
+read_ = "read"
+write_ = "write"
+
 hlt_ = "hlt"
 
 
@@ -45,6 +52,11 @@ instruction_code_map = {
     jmp_: 0x30,
     jez_: 0x31,
     jnz_: 0x32,
+    mem_inc: 0x36,
+    mem_dec: 0x37,
+    mem_set: 0x38,
+    read_: 0x39,
+    write_: 0x3a,
 
     hlt_: 0xff,
 }

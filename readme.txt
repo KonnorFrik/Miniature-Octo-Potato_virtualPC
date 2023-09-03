@@ -12,6 +12,7 @@
 |        A(accumulator): 8-bit - all math and bitwise operations results store here             |
 |        DS: 8-bit - for store data from register A. Can't be writed or readed directly         |
 |        PC (Programm Counter): 8-bit - store address of next instruction in memory             |
+|        MP (Memory Pointer): 8-bit - store address for read/write operations                   |
 |Memory:                                                                                        |
 |    8-bit for one cell                                                                         |
 |===============================================================================================|
@@ -37,7 +38,7 @@
 |                                    Language                                                   |
 |                                   &                                                           |
 |                                    Instructions                                               |
-| [KEYWORD] [OPERATOR] [NUMBER | ADDRESS]                                                       |
+| [KEYWORD] [[OPERATOR] [NUMBER] | SPECIAL_OPERAND]                                             |
 |                                                                                               |
 |Keywords:                                                                                      |
 |   all in square brackets are optional                                                         |
@@ -63,9 +64,14 @@
 |   jmp [ao] [addr]       - jump to addr 'num'                                                  |
 |   jez [ao] [addr]       - jump to addr 'num' if A = 0                                         |
 |   jnz [ao] [addr]       - jump to addr 'num' if A not = 0                                     |
+|   mem inc               - result of MP reg plus A writed to MP (MP = MP + A)                  |
+|   mem dec               - result of MP reg subtract A writed to MP (MP = MP - A)              |
+|   mem set               - move value from A register to MP (MP = A)                           |
+|   read                  - move value to A reg from memory with address stored in MP reg       |
+|   write                 - move value from A reg to memory with address stored in MP reg       |
 |   hlt                   - halt, set 'run bit' to 0/false and exit                             |
 |                                                                                               |
-|Number and Address:                                                                            |
+|Number:                                                                                        |
 |   any number between 0 and 255 in decimal or hexadecimal format                               |
 |                                                                                               |
 |Operators:                                                                                     |
@@ -73,6 +79,9 @@
 |       Provides access to a memory location to read/write values                               |
 |       Used with: ld, sav, swp, add, sub, mul, div, and, or, xor, jmp, jez, jnz                |
 |       Exmp: "ld $n" - load to register A value from memory cell with address 'n'              |
+|                                                                                               |
+|Special Operand:                                                                               |
+|   inc, dec, set - Fake operands for define one-byte code instruction                          |
 |===============================================================================================|
 |                                  Memory Addressing                                            |
 |Emulator have relative memory addressing. That mean if in your programm writed "jmp 0x01" and  |

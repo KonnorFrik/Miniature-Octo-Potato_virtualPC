@@ -307,6 +307,90 @@ void CPU::execute() {
             }
             break;
 
+        case (MEM_INC):
+            this->MP += this->A;
+
+            if (DEBUG) {
+                std::cout << " - MEM_INC, reg: "
+                    << "hex("
+                    << std::hex
+                    << static_cast<short>(this->MP)
+                    << std::dec
+                    << "), dec("
+                    << static_cast<short>(this->MP)
+                    << ")"
+                    << std::endl;
+            }
+
+            break;
+
+        case (MEM_DEC):
+            this->MP -= this->A;
+
+            if (DEBUG) {
+                std::cout << " - MEM_DEC, reg: "
+                    << "hex("
+                    << std::hex
+                    << static_cast<short>(this->MP)
+                    << std::dec
+                    << "), dec("
+                    << static_cast<short>(this->MP)
+                    << ")"
+                    << std::endl;
+            }
+
+            break;
+
+        case (MEM_SET):
+            this->MP = this->A;
+
+            if (DEBUG) {
+                std::cout << " - MEM_SET, reg: "
+                    << "hex("
+                    << std::hex
+                    << static_cast<short>(this->MP)
+                    << std::dec
+                    << "), dec("
+                    << static_cast<short>(this->MP)
+                    << ")"
+                    << std::endl;
+            }
+
+            break;
+
+        case (READ):
+            if (DEBUG) {
+                std::cout << " - READ, from: "
+                    << "hex("
+                    << std::hex
+                    << static_cast<short>(this->MP)
+                    << std::dec
+                    << "), dec("
+                    << static_cast<short>(this->MP)
+                    << ")"
+                    << std::endl;
+            }
+
+            this->A = this->memory[this->MP];
+            break;
+
+
+        case (WRITE):
+            if (DEBUG) {
+                std::cout << " - WRITE, to: "
+                    << "hex("
+                    << std::hex
+                    << static_cast<short>(this->MP)
+                    << std::dec
+                    << "), dec("
+                    << static_cast<short>(this->MP)
+                    << ")"
+                    << std::endl;
+            }
+
+            this->memory[this->MP] = this->A;
+            break;
+
         case (HLT):
             if (DEBUG) {
                 std::cout << " - HLT" << std::endl;
@@ -635,6 +719,11 @@ void CPU::dump() {
     std::cout << "instruction: "
         << std::hex << static_cast<short>(this->instruction)
         << std::dec << std::endl;
+
+    std::cout << "MP: hex("
+        << std::hex << static_cast<short>(this->MP)
+        << std::dec << ") dec(" << static_cast<short>(this->MP)
+        << ")" << std::endl;
 
     std::cout << "DS: hex("
         << std::hex << static_cast<short>(this->DS)

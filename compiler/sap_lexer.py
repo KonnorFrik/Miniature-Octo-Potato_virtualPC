@@ -28,6 +28,13 @@ class SapLexer(RegexLexer):
             (r"^\s*jez", token.Keyword),
             (r"^\s*jnz", token.Keyword),
 
+            (r"^\s*mem", token.Keyword.Special),
+            (r"^\s*read", token.Keyword.Special),
+            (r"^\s*write", token.Keyword.Special),
+            (r"inc", token.Keyword.Special.Operand),
+            (r"dec", token.Keyword.Special.Operand),
+            (r"set", token.Keyword.Special.Operand),
+
             (r"^\s*hlt", token.Keyword),
 
             (r"0x[0-9abcdef]+", token.Number),

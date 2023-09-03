@@ -44,6 +44,13 @@ static const Byte JMP_M = 0x33;
 static const Byte JEZ_M = 0x34;
 static const Byte JNZ_M = 0x35;
 
+static const Byte MEM_INC = 0x36;
+static const Byte MEM_DEC = 0x37;
+static const Byte MEM_SET = 0x38;
+
+static const Byte READ = 0x39;
+static const Byte WRITE = 0x3a;
+
 static const Byte HLT = 0xff;
 
 

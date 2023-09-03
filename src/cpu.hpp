@@ -19,6 +19,7 @@ class CPU {
     //Byte data{0};         // for store data
     Byte A{0};            // number register (like output register)
     Byte DS{0};             // data storage reg
+    Byte MP{0};
     bool run_bit{true};
 
     Byte load_data();
